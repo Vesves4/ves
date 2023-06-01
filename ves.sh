@@ -219,7 +219,7 @@ core_load(){
   EXISTING="$(sensors -v)"
   if [ -z "$EXISTING" ]
     then
-    apt install sensors
+    apt install lm-sensors
   fi
   LOAD="$(__=`sensors | grep Core` && echo \(`echo $__ | sed 's/.*+\(.*\).C\(\s\)\+(.*/\1/g' | tr "\n" "+" | head -c-1`\)\/`echo $__ | wc -l` | bc && unset __)"
   echo "Average CPU load: $LOAD%"
