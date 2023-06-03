@@ -44,15 +44,15 @@ docker_install() {
 }
 
 docker_ubuntu_install() {
-  apt-get update -y && apt-get install ca-certificates curl gnupg -y
-  install -m 0755 -d /etc/apt/keyrings
-  -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  chmod a+r /etc/apt/keyrings/docker.gpg
-  echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-  apt-get update && apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-  curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  chmod +x /usr/local/bin/docker-compose
-  usermod -a -G docker $USER
+  apt-get update -y && apt-get install ca-certificates curl gnupg -y 2>/dev/null
+  install -m 0755 -d /etc/apt/keyrings 2>/dev/null
+  -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null
+  chmod a+r /etc/apt/keyrings/docker.gpg 2>/dev/null
+  echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list 2>/dev/null
+  apt-get update && apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y 2>/dev/null
+  curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 2>/dev/null
+  chmod +x /usr/local/bin/docker-compose 2>/dev/null
+  usermod -a -G docker $USER 2>/dev/null
   echo "Docker installed successfully!"
   echo "You can use Docker and docker-compose/docker compose"
 }
@@ -111,13 +111,13 @@ minikube_install() {
 }
 
 minikube_ubuntu_install() {
-  apt-get update -y && apt-get upgrade -y
-  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-  chmod +x minikube-linux-amd64
-  mv minikube-linux-amd64 /usr/local/bin/minikube
-  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-  chmod +x ./kubectl
-  mv ./kubectl /usr/local/bin/kubectl
+  apt-get update -y && apt-get upgrade -y 2>/dev/null
+  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 2>/dev/null
+  chmod +x minikube-linux-amd64 2>/dev/null
+  mv minikube-linux-amd64 /usr/local/bin/minikube 2>/dev/null
+  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl 2>/dev/null
+  chmod +x ./kubectl 2>/dev/null
+  mv ./kubectl /usr/local/bin/kubectl 2>/dev/null
 }
 
 minikube_debian_install() {
@@ -236,6 +236,54 @@ space_usage() {
   echo "$DISK_USAGE"
 }
 
+update_script() {
+  curl https://raw.githubusercontent.com/Vesves4/ves/main/ves.sh > /home/$USER/ves/ves-tmp.sh
+  DIFF_PRESENT="$(diff -v)"
+  if [ -z "$DIFF_PRESENT" ] && [ "$DISTRO" == "\"Ubuntu\"" ]
+    apt-install diff
+  fi
+  DIFF_FILE="$(diff /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh)"
+  if [ -z "$DIFF_FILE" ]
+    then
+    rm /home/$USER/ves/ves-tmp.sh
+    echo "There is no update available!"
+  elif [ "$DIFF_FILE" ]
+    then
+    rm /home/$USER/ves/ves.sh
+    mv /home/$USER/ves/ves-tmp.sh /home/$USER/ves/ves.sh
+    chmod +x /home/$USER/ves/ves.sh
+    echo "Script was updated!"
+  else
+    echo "Unrecognized error.."
+  fi
+}
+
+add_function() {
+  if [ "$ARG2" == "alias" ]
+    then
+    echo "alias"
+  elif [ "$ARG2" == "gui" ]
+    then
+    echo "zenity"
+  else
+    echo " "
+    echo "+=====================================+"
+    echo "+               USAGE                 +"
+    echo "+=====================================+"
+    echo "+                                     +"
+    echo "+                                     +"
+    echo "+ ves add FUNCTION                    +"
+    echo "+                                     +"
+    echo "+ List of available FUNCTIONS:        +"
+    echo "+ Aliases (alias)                     +"
+    echo "+    - Adds useful aliases            +"
+    echo "+      A list of will be generated!   +"
+    echo "+ Gui prompts (gui)                   +"
+    echo "+    - Adds gui promps to the script  +"
+    echo "+=====================================+"
+  fi
+}
+
 # Listen for the command
 COMMAND="$1"
 ARG2="$2"
@@ -257,13 +305,21 @@ elif [ "$COMMAND" == "pcinfo" ]
   core_load
   echo " "
   html_info
+elif [ "$COMMAND" == "update" ]
+  then
+  update_script
+elif [ "$COMMAND" == "add" ]
+  then
+  add_function
 else
-  echo " "
+  clear
   echo "+=======================================================================+"
   echo "+                               USAGE                                   +"
   echo "+                                                                       +"
   echo "+                                                                       +"
   echo "+ ves install          -- Will show you what applications are available +"
   echo "+ ves pcinfo           -- Will give you information about the PC        +"
+  echo "+ ves update           -- Will update the script to its newest version  +"
+  echo "+ ves add              -- Will show you a list of functions u can add   +"
   echo "+=======================================================================+"
 fi
