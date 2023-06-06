@@ -240,7 +240,7 @@ update_script() {
   curl https://raw.githubusercontent.com/Vesves4/ves/main/ves.sh > /home/$USER/ves/ves-tmp.sh 2>/dev/null
   if [ -z "$DIFF_PRESENT" ] && [ "$DISTRO" == "\"Ubuntu\"" ]
     then
-    apt-install diff
+    apt install diff
   fi
   DIFF_FILE="$(diff /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh)"
   if cmp -s /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh
