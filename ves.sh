@@ -259,29 +259,68 @@ update_script() {
   fi
 }
 
-add_function() {
+configure_functions() {
   if [ "$ARG2" == "alias" ]
     then
-    echo "alias"
+    function_alias
   elif [ "$ARG2" == "gui" ]
     then
-    echo "zenity"
+    function_gui
+  fi
+}
+
+function_alias() {
+  if [ "$COMMAND" == "add" ]
+    then
+    add_custom_aliases
+  elif [ "$COMMAND" == "remove" ]
+    then
+    remove_custom_aliases
   else
-    echo " "
-    echo "+=====================================+"
-    echo "+               USAGE                 +"
-    echo "+=====================================+"
-    echo "+                                     +"
-    echo "+                                     +"
-    echo "+ ves add FUNCTION                    +"
-    echo "+                                     +"
-    echo "+ List of available FUNCTIONS:        +"
-    echo "+ Aliases (alias)                     +"
-    echo "+    - Adds useful aliases            +"
-    echo "+      A list of will be generated!   +"
-    echo "+ Gui prompts (gui)                   +"
-    echo "+    - Adds gui promps to the script  +"
-    echo "+=====================================+"
+    echo "Alias error"
+  fi
+}
+
+add_custom_aliases() {
+  ALIAS_FILE=$(cat /home/$USER/ves/aliases/aliases.ves 2>/dev/null)
+  ALIAS_COMMAND=$(cat /home/$USER/.bashrc | grep aliases.ves 2>/dev/null)
+  if [ -z "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
+    then
+    curl URL > /home/$USER/ves/aliases/aliases.ves
+    echo ". ~/ves/aliases/aliases.ves" >> /home/$USER/.bashrc
+  elif [ -z "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
+    then
+    curl URL > /home/$USER/ves/aliases/aliases.ves
+  elif [ "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
+    then
+    curl URL > /home/$USER/ves/aliases/aliases.ves
+    echo ". ~/ves/aliases/aliases.ves" >> /home/$USER/.bashrc
+  elif [ "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
+    then
+    echo "Aliases are already setup"
+  else
+    echo "Alias installation error"
+  fi
+}
+
+remove_custom_aliases() {
+  ALIAS_FILE=$(cat /home/$USER/ves/aliases/aliases.ves 2>/dev/null)
+  ALIAS_COMMAND=$(cat /home/$USER/.bashrc | grep aliases.ves 2>/dev/null)
+  if [ -z "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
+    then
+    echo "There's nothing to remove!"
+  elif [ -z "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
+    then
+    sed -i 's%. ~/ves/aliases/aliases.ves%%' /home/$USER/.bashrc 
+  elif [ "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
+    then
+    rm /home/$USER/ves/aliases/aliases.ves
+  elif [ "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
+    then
+    sed -i 's%. ~/ves/aliases/aliases.ves%%' /home/$USER/.bashrc
+    rm /home/$USER/ves/aliases/aliases.ves
+  else
+    echo "Alias removal error"
   fi
 }
 
@@ -309,18 +348,19 @@ elif [ "$COMMAND" == "pcinfo" ]
 elif [ "$COMMAND" == "update" ]
   then
   update_script
-elif [ "$COMMAND" == "add" ]
+elif [ "$COMMAND" == "add" ] || [ "$COMMAND" == "remove" ]
   then
-  add_function
+  configure_functions
 else
   clear
-  echo "+=======================================================================+"
-  echo "+                               USAGE                                   +"
-  echo "+                                                                       +"
-  echo "+                                                                       +"
-  echo "+ ves install          -- Will show you what applications are available +"
-  echo "+ ves pcinfo           -- Will give you information about the PC        +"
-  echo "+ ves update           -- Will update the script to its newest version  +"
-  echo "+ ves add              -- Will show you a list of functions u can add   +"
-  echo "+=======================================================================+"
+  echo "+==========================================================================+"
+  echo "+                               USAGE                                      +"
+  echo "+                                                                          +"
+  echo "+                                                                          +"
+  echo "+ ves install          -- Will show you what applications are available    +"
+  echo "+ ves pcinfo           -- Will give you information about the PC           +"
+  echo "+ ves update           -- Will update the script to its newest version     +"
+  echo "+ ves add              -- Will show you a list of functions u can add      +"
+  echo "+ ves remove           -- Will show you a list of functions you can remove +"
+  echo "+==========================================================================+"
 fi
