@@ -238,24 +238,20 @@ space_usage() {
 
 update_script() {
   curl https://raw.githubusercontent.com/Vesves4/ves/main/ves.sh > /home/$USER/ves/ves-tmp.sh 2>/dev/null
-  DIFF_PRESENT="$(diff -v)"
   if [ -z "$DIFF_PRESENT" ] && [ "$DISTRO" == "\"Ubuntu\"" ]
     then
     apt-install diff
   fi
   DIFF_FILE="$(diff /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh)"
-  if [ -z "$DIFF_FILE" ]
-    then
-    rm /home/$USER/ves/ves-tmp.sh
-    echo "There is no update available!"
-  elif [ "$DIFF_FILE" ]
+  if cmp -s /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh
     then
     rm /home/$USER/ves/ves.sh
     mv /home/$USER/ves/ves-tmp.sh /home/$USER/ves/ves.sh
     chmod +x /home/$USER/ves/ves.sh
     echo "Script was updated!"
   else
-    echo "Unrecognized error.."
+    rm /home/$USER/ves/ves-tmp.sh
+    echo "There is no update available!"
   fi
 }
 
