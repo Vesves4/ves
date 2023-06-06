@@ -242,7 +242,6 @@ update_script() {
     then
     apt install diff
   fi
-  DIFF_FILE="$(diff /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh)"
   if cmp -s /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh
     then
     rm /home/$USER/ves/ves.sh
