@@ -242,15 +242,18 @@ update_script() {
     then
     apt-get install diff
   fi
-  if cmp -s /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh
+  FILEDIFF=$(diff /home/$USER/ves/ves.sh /home/$USER/ves/ves-tmp.sh 2>/dev/null)
+  if [ "$FILEDIFF" ]
     then
     rm /home/$USER/ves/ves.sh
     mv /home/$USER/ves/ves-tmp.sh /home/$USER/ves/ves.sh
     chmod +x /home/$USER/ves/ves.sh
     echo "Script was updated!"
-  else
+  elif [ -z "$FILEDIFF" ]
     rm /home/$USER/ves/ves-tmp.sh
     echo "There is no update available!"
+  else
+    echo "Error while doing difference check"
   fi
 }
 
