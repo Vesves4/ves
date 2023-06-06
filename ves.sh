@@ -200,7 +200,7 @@ installation() {
   else
     echo " "
     echo "No Application chosen (ves install APP)"
-    echo "Please choose what to install:"
+    echo "Please pick what to install:"
     echo "Docker (docker)"
     echo "Minikube (minkube)"
     echo "Terraform (terraform)"
