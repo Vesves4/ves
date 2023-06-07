@@ -37,3 +37,6 @@ alias doker="docker"
 # -- Terraform --
 alias teraform="terraform"
 alias terrafom="terraform"
+
+# HELP
+alias ahelp="cat ~/ves/aliases/aliases.ves"
