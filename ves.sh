@@ -314,14 +314,14 @@ add_mkcd() {
   if [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
     then
     echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
-    curl URI > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
+    curl https://raw.githubusercontent.com/Vesves4/ves/main/functions/mkcd.sh > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
     chmod +x /home/$USER/ves/functions/mkcd.sh
   elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
     then
     echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
   elif [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
     then
-    curl URI > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
+    curl https://raw.githubusercontent.com/Vesves4/ves/main/functions/mkcd.sh > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
     chmod +x /home/$USER/ves/functions/mkcd.sh
   elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
     then
