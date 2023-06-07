@@ -268,9 +268,19 @@ configure_functions() {
   elif [ "$ARG2" == "mkcd" ]
     then
     function_mkcd
+  elif [ "$ARG2" == "rsh" ]
+    then
+    function_rsh
   elif [ "$ARG2" == "gui" ]
     then
     function_gui
+  else
+    echo "Please choose a function to add/remove:"
+    echo " "
+    echo "alias  - A bunch of usefull aliases"
+    echo "mkcd   - mkcd command (mkdir + cd) "
+    echo "rsh    - run a script remotely     "
+    echo "gui    - GUI prompts for the script"
   fi
 }
 
@@ -316,16 +326,23 @@ add_mkcd() {
     echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
     curl https://raw.githubusercontent.com/Vesves4/ves/main/functions/mkcd.sh > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
     chmod +x /home/$USER/ves/functions/mkcd.sh
+    echo "function mkcd added!"
+    echo "You can now use the mkcd command (after you restart your terminal)"
   elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
     then
     echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
+    echo "function mkcd added!"
+    echo "You can now use the mkcd command (after you restart your terminal)"
   elif [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
     then
     curl https://raw.githubusercontent.com/Vesves4/ves/main/functions/mkcd.sh > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
     chmod +x /home/$USER/ves/functions/mkcd.sh
+    echo "function mkcd added!"
+    echo "You can now use the mkcd command (after you restart your terminal)"
   elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
     then
     echo "Function/Command mkcd already installed"
+    echo "You can now use the mkcd command (after you restart your terminal)"
   else
     echo "Mkcd installation error"
   fi
@@ -348,18 +365,25 @@ add_custom_aliases() {
   ALIAS_COMMAND=$(cat /home/$USER/.bashrc | grep aliases.ves 2>/dev/null)
   if [ -z "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
     then
-    curl URL > /home/$USER/ves/aliases/aliases.ves
+    curl https://raw.githubusercontent.com/Vesves4/ves/main/aliases/aliases.ves > /home/$USER/ves/aliases/aliases.ves
     echo ". ~/ves/aliases/aliases.ves" >> /home/$USER/.bashrc
+    echo "Aliases added!"
+    echo "In order to see the aliases u can run ahelp!"
   elif [ -z "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
     then
-    curl URL > /home/$USER/ves/aliases/aliases.ves
+    curl https://raw.githubusercontent.com/Vesves4/ves/main/aliases/aliases.ves > /home/$USER/ves/aliases/aliases.ves
+    echo "Aliases added!"
+    echo "In order to see the aliases u can run ahelp!"
   elif [ "$ALIAS_FILE" ] && [ -z "$ALIAS_COMMAND" ]
     then
-    curl URL > /home/$USER/ves/aliases/aliases.ves
+    curl https://raw.githubusercontent.com/Vesves4/ves/main/aliases/aliases.ves > /home/$USER/ves/aliases/aliases.ves
     echo ". ~/ves/aliases/aliases.ves" >> /home/$USER/.bashrc
+    echo "Aliases added!"
+    echo "In order to see the aliases u can run ahelp!"
   elif [ "$ALIAS_FILE" ] && [ "$ALIAS_COMMAND" ]
     then
     echo "Aliases are already setup"
+    echo "In order to see the aliases u can run ahelp!"
   else
     echo "Alias installation error"
   fi
