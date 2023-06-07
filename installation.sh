@@ -15,7 +15,7 @@ file() {
 }
 
 alias_setup() {
-  echo "alias ves=\"sudo -u $USER /home/$USER/ves/ves.sh\"" >> /home/$USER/.bashrc 2>/dev/null
+  echo "alias ves=\"sudo -u $USER /home/$USER/ves/ves.sh 2>/dev/null\"" >> /home/$USER/.bashrc 2>/dev/null
   . /home/$USER/.bashrc
 }
 
