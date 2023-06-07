@@ -1,0 +1,7 @@
+# -- Docker --
+alias dicker="docker"
+alias dcker="docker"
+alias doker="docker"
+# -- Terraform --
+alias teraform="terraform"
+alias terrafom="terraform"

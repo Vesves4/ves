@@ -257,12 +257,77 @@ update_script() {
 }
 
 configure_functions() {
+  FUNC_FOLDER="$(ls /home/$USER/ | grep ves 2>/dev/null)"
+  if [ -z "$FUNC_FOLDER" ]
+    then
+    mkdir -p /home/$USER/ves/functions
+  fi
   if [ "$ARG2" == "alias" ]
     then
     function_alias
+  elif [ "$ARG2" == "mkcd" ]
+    then
+    function_mkcd
   elif [ "$ARG2" == "gui" ]
     then
     function_gui
+  fi
+}
+
+function_mkcd() {
+  if [ "$COMMAND" == "add" ]
+    then
+    add_mkcd
+  elif [ "$COMMAND" == "remove" ]
+    then
+    remove_mkcd
+  else
+    echo "mkcd Error"
+  fi
+}
+
+remove_mkcd() {
+  MKCD_ALIAS=$(cat /home/$USER/.bashrc | grep mkcd= 2>/dev/null)
+  if [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
+    then
+    echo "Function/Script mkcd is not installed"
+  elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
+    then
+    rm /home/$USER/ves/functions/mkcd.sh
+    echo "Function mkcd removed"
+  elif [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
+    then
+    sed 's%alias mkcd="/home/$USER/ves/functions/mkcd.sh"%%'
+    echo "Function mkcd removed"
+  elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
+    then
+    rm /home/$USER/ves/functions/mkcd.sh
+    sed 's%alias mkcd="/home/$USER/ves/functions/mkcd.sh"%%'
+    echo "Function mkcd removed"
+  else
+    echo "Mkcd removal error"
+  fi
+}
+
+add_mkcd() {
+  MKCD_ALIAS=$(cat /home/$USER/.bashrc | grep mkcd= 2>/dev/null)
+  if [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
+    then
+    echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
+    curl URI > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
+    chmod +x /home/$USER/ves/functions/mkcd.sh
+  elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ -z "$MKCD_ALIAS" ]
+    then
+    echo "alias mkcd=\"/home/$USER/ves/functions/mkcd.sh\"" 2>/dev/null
+  elif [ ! -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
+    then
+    curl URI > /home/$USER/ves/functions/mkcd.sh 2>/dev/null
+    chmod +x /home/$USER/ves/functions/mkcd.sh
+  elif [ -f /home/$USER/ves/functions/mkcd.sh ] && [ "$MKCD_ALIAS" ]
+    then
+    echo "Function/Command mkcd already installed"
+  else
+    echo "Mkcd installation error"
   fi
 }
 

@@ -1,0 +1,28 @@
+# -- System --
+alias l="ls -la"
+alias cler="clear"
+alias c="clear"
+alias h="history"
+alias j="jobs -l"
+alias path="echo -e ${PATH//:/\\n}"
+alias now='date +"%T"'
+alias fast-ping="ping -c 100 -s.2"
+alias ports="netstat -tulanp"
+alias untar="tar -zxvf"
+
+# Hacks
+alias profile="nano /home/vesves4/.bash_profile"
+alias refresh=". /home/vesves4/.bash_profile"
+alias core="/home/vesves4/bash/core.sh"
+alias myip="/home/vesves4/bash/ip.sh"
+alias syntax="/home/vesves4/bash/filecase.sh"
+alias remotesh="/home/vesves4/bash/remotescript.sh"
+alias back="cd -"
+
+# Directory backs
+alias .1="cd .."
+alias .2="cd ../.."
+alias .3="cd ../../.."
+alias .4="cd ../../../.."
+alias .5="cd ../../../../.."
+alias .6="cd ../../../../../.."
