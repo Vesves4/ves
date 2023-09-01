@@ -228,6 +228,8 @@ core_load(){
 html_info() {
   lshw -html 2> /dev/null > pc-info.html
   echo "An html file has been generated with additional pc information, open in browser to see"
+  echo "file:///$PWD/pc-info.html"
+  printf '\e]8;;file:///$PWD/pc-info.html\\PC INFO\e]8;;\e\\\n'
 }
 
 space_usage() {
