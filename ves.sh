@@ -230,6 +230,7 @@ html_info() {
   echo "An html file has been generated with additional pc information, open in browser to see"
   echo "file:///$PWD/pc-info.html"
   printf '\e]8;;file:///$PWD/pc-info.html\e\\PC INFO\e]8;;\e\\\n'
+  echo "Change"
 }
 
 space_usage() {
